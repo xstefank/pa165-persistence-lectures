@@ -2,9 +2,14 @@ package io.xstefank;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import java.time.LocalDate;
 
 @Entity
 public class Employee {
@@ -18,12 +23,21 @@ public class Employee {
 
     private Integer salary;
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @NotNull
+    @Past
+    private LocalDate birthDate;
+
     public Employee() {
     }
 
-    public Employee(String name, Integer salary) {
+    public Employee(String name, Integer salary, Gender gender, LocalDate birthDate) {
         this.name = name;
         this.salary = salary;
+        this.gender = gender;
+        this.birthDate = birthDate;
     }
 
     public Long getId() {
@@ -50,6 +64,22 @@ public class Employee {
         this.salary = salary;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -57,5 +87,26 @@ public class Employee {
             ", name='" + name + '\'' +
             ", salary=" + salary +
             '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Employee)) return false;
+
+        Employee employee = (Employee) o;
+
+        if (getName() != null ? !getName().equals(employee.getName()) : employee.getName() != null) return false;
+        if (getSalary() != null ? !getSalary().equals(employee.getSalary()) : employee.getSalary() != null)
+            return false;
+        return getBirthDate() != null ? getBirthDate().equals(employee.getBirthDate()) : employee.getBirthDate() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getName() != null ? getName().hashCode() : 0;
+        result = 31 * result + (getSalary() != null ? getSalary().hashCode() : 0);
+        result = 31 * result + (getBirthDate() != null ? getBirthDate().hashCode() : 0);
+        return result;
     }
 }
