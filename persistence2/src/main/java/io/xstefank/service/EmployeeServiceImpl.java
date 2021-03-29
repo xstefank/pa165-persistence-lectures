@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+@Transactional
+public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeDao employeeDao;
 
     @Override
-    @Transactional
     public void create(Employee employee) {
         employeeDao.create(employee);
     }
