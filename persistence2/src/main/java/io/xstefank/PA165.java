@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 
 @Component
@@ -18,6 +21,9 @@ public class PA165 {
     
     public void start() {
         initDB();
+
+
+
     }
 
     private void initDB() {
@@ -53,5 +59,27 @@ public class PA165 {
         } finally {
             if (em != null) em.close();
         }
+    }
+
+    private Department findDepartmentByName(EntityManager em, String departmentName) {
+        return em.createQuery("select d from Department d join fetch d.employees where d.name = :name", Department.class)
+            .setParameter("name", departmentName)
+            .getSingleResult();
+    }
+
+    private void selectWithCriteriaAPI() {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
+        Root<Employee> e = query.from(Employee.class);
+
+        query.select(e).where(cb.equal(e.get("name"), "Luke Skywalker"));
+
+        System.out.println(em.createQuery(query).getResultList());
+
+        em.getTransaction().commit();
+        em.close();
     }
 }
