@@ -8,14 +8,10 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.instrument.classloading.LoadTimeWeaver;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-
-import javax.sql.DataSource;
-import java.util.Properties;
 
 
 @Configuration
@@ -49,10 +45,5 @@ public class PA165PersistenceConfig {
     @Bean
     public LoadTimeWeaver instrumentationLoadTimeWeaver() {
         return new InstrumentationLoadTimeWeaver();
-    }
-
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-        return new PersistenceExceptionTranslationPostProcessor();
     }
 }

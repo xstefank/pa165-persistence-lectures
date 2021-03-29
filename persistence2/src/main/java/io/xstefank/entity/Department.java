@@ -1,6 +1,7 @@
 package io.xstefank.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +19,7 @@ public class Department {
 
     private String name;
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
     private Set<Employee> employees = new HashSet<>();
 
     public Department() {
@@ -50,7 +51,7 @@ public class Department {
     }
 
     public Set<Employee> getEmployees() {
-        return employees;
+        return Collections.unmodifiableSet(employees);
     }
 
     public void setEmployees(Set<Employee> employees) {

@@ -2,6 +2,7 @@ package io.xstefank.entity;
 
 import io.xstefank.enums.Gender;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,7 +22,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     private Integer salary;
@@ -33,7 +34,7 @@ public class Employee {
     @Past
     private LocalDate birthDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Department department;
 
     public Employee() {
