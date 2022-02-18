@@ -2,7 +2,6 @@ package io.xstefank.entity;
 
 import io.xstefank.enums.Gender;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

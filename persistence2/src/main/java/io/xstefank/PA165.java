@@ -3,7 +3,6 @@ package io.xstefank;
 import io.xstefank.entity.Department;
 import io.xstefank.entity.Employee;
 import io.xstefank.enums.Gender;
-import io.xstefank.jqpl.DepartmentBudget;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -13,7 +12,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
-import java.util.List;
 
 @Component
 public class PA165 {
@@ -25,42 +23,7 @@ public class PA165 {
         initDB();
 
 
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
 
-        selectWithCriteriaAPI();
-
-//        Department department = findDepartmentByName(em, "Jedi");
-//
-//        List<DepartmentBudget> result = em.createQuery("select new io.xstefank.jqpl.DepartmentBudget(d, sum(e.salary)) from Department d join d.employees e group by d", DepartmentBudget.class).getResultList();
-//
-//        System.out.println(result.get(0).getDepartment().getName());
-
-//        department.getEmployees().size();
-
-
-//        Employee martin = new Employee("Martin", 20000, Gender.MALE, LocalDate.of(1993, 1, 1));
-//        Department sith = new Department("Sith");
-//
-//        em.persist(martin);
-//        em.persist(sith);
-//
-//        sith.getEmployees().add(martin);
-//        martin.setDepartment(sith);
-//
-//        System.out.println(martin);
-
-        em.getTransaction().commit();
-        em.close();
-
-//        System.out.println(department.getEmployees());
-
-    }
-
-    private Department findDepartmentByName(EntityManager em, String departmentName) {
-        return em.createQuery("select d from Department d join fetch d.employees where d.name = :name", Department.class)
-            .setParameter("name", departmentName)
-            .getSingleResult();
     }
 
     private void initDB() {
@@ -98,14 +61,20 @@ public class PA165 {
         }
     }
 
+    private Department findDepartmentByName(EntityManager em, String departmentName) {
+        return em.createQuery("select d from Department d join fetch d.employees where d.name = :name", Department.class)
+            .setParameter("name", departmentName)
+            .getSingleResult();
+    }
+
     private void selectWithCriteriaAPI() {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
-
         Root<Employee> e = query.from(Employee.class);
+
         query.select(e).where(cb.equal(e.get("name"), "Luke Skywalker"));
 
         System.out.println(em.createQuery(query).getResultList());
