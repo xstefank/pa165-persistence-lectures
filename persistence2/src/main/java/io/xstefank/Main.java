@@ -5,6 +5,7 @@ import io.xstefank.enums.Gender;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
 import javax.persistence.Persistence;
 import java.time.LocalDate;
 import java.time.Month;
@@ -16,33 +17,52 @@ public class Main {
         EntityManager em = null;
 
         try {
-            emf =  Persistence.createEntityManagerFactory("default");
+            emf = Persistence.createEntityManagerFactory("default");
             em = emf.createEntityManager();
 
             em.getTransaction().begin();
 
+            Employee luke = new Employee("Luke", null, Gender.MALE, LocalDate.of(2099, Month.JANUARY, 1));
 
-//            Employee luke = em.find(Employee.class, 1L);
-
-            Employee luke = new Employee("Luke", 20000, Gender.MALE, LocalDate.of(1990, Month.JANUARY, 1));
             em.persist(luke);
 
 
+            em.flush();
+            em.clear();
+            em.setFlushMode(FlushModeType.COMMIT);
+//            Session session = em.unwrap(Session.class);
+//            Employee luke = em.find(Employee.class, 1L);
+//
+//            em.remove(luke);
+
+//            Employee luke = new Employee("Luke", 20000);
+//            em.persist(luke);
 
 //            Employee leia = new Employee("Leia", 22000);
 //            em.persist(leia);
-//
+
 //            List<Employee> employees = em.createQuery("select e from Employee e where e.salary > :salary", Employee.class)
 //                .setParameter("salary", 21000)
 //                .getResultList();
 //            System.out.println(employees);
 
-            luke = em.merge(luke);
-
-
             em.getTransaction().commit();
 
-
+//            em.getTransaction().begin();
+//
+//            Employee luke = new Employee("Luke", 20000);
+//            em.persist(luke);
+//
+//            em.getTransaction().commit();
+//            em.close();
+//
+//            em = emf.createEntityManager();
+//            em.getTransaction().begin();
+//
+//            Employee employee = em.find(Employee.class, 1L);
+//            System.out.println(employee);
+//
+//            em.getTransaction().commit();
 
         } finally {
             if (em != null) {
@@ -53,6 +73,5 @@ public class Main {
                 emf.close();
             }
         }
-
     }
 }
