@@ -62,7 +62,7 @@ public class PA165 {
     }
 
     private Department findDepartmentByName(EntityManager em, String departmentName) {
-        return em.createQuery("select d from Department d join fetch d.employees where d.name = :name", Department.class)
+        return em.createQuery("select d from Department d where d.name = :name", Department.class)
             .setParameter("name", departmentName)
             .getSingleResult();
     }
