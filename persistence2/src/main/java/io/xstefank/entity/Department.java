@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,7 +50,7 @@ public class Department {
     }
 
     public Set<Employee> getEmployees() {
-        return employees;
+        return Collections.unmodifiableSet(employees);
     }
 
     public void setEmployees(Set<Employee> employees) {

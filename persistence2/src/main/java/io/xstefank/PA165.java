@@ -3,6 +3,11 @@ package io.xstefank;
 import io.xstefank.entity.Department;
 import io.xstefank.entity.Employee;
 import io.xstefank.enums.Gender;
+import io.xstefank.jqpl.DepartmentBudget;
+import io.xstefank.service.EmployeeService;
+import org.postgresql.util.PSQLException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -11,18 +16,71 @@ import javax.persistence.PersistenceUnit;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 public class PA165 {
 
     @PersistenceUnit
     private EntityManagerFactory emf;
-    
+
+    @Autowired
+    private EmployeeService employeeService;
+
     public void start() {
         initDB();
 
+        selectWithCriteriaAPI();
 
+//        EntityManager em = emf.createEntityManager();
+//        em.getTransaction().begin();
+//
+//        List<DepartmentBudget> resultList = em.createQuery("select " +
+//                "new io.xstefank.jqpl.DepartmentBudget(d, sum(e.salary)) " +
+//                "from Department d join d.employees e group by d",
+//                DepartmentBudget.class)
+//            .getResultList();
+//
+//        System.out.println(resultList.get(0).getDepartment().getName());
+//
+//
+//        em.getTransaction().commit();
+//        em.close();
+
+
+//        Employee martin = new Employee(null, 20000, Gender.MALE, LocalDate.of(1993, 1, 1));
+//
+//
+//        try {
+//            employeeService.create(martin);
+//        } catch (DataAccessException e) {
+//            throw new RuntimeException("ouch");
+//        }
+
+//        EntityManager em = emf.createEntityManager();
+//
+//        em.getTransaction().begin();
+//
+//        Department department = findDepartmentByName(em, "Jedi");
+
+//        department.getEmployees().size();
+
+//        Employee martin = new Employee("Martin", 20000, Gender.MALE, LocalDate.of(1993, 1, 1));
+//        Department sith = new Department("Sith");
+//
+//        em.persist(martin);
+////        em.persist(sith);
+//
+//        sith.addEmployee(martin);
+////        martin.setDepartment(sith);
+////        sith.getEmployees().add(martin);
+
+////        em.getTransaction().commit();
+////        em.close();
+//
+//        System.out.println(department.getEmployees());
 
     }
 
@@ -62,7 +120,7 @@ public class PA165 {
     }
 
     private Department findDepartmentByName(EntityManager em, String departmentName) {
-        return em.createQuery("select d from Department d where d.name = :name", Department.class)
+        return em.createQuery("select d from Department d join fetch d.employees where d.name = :name", Department.class)
             .setParameter("name", departmentName)
             .getSingleResult();
     }
